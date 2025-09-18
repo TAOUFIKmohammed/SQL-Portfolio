@@ -36,5 +36,28 @@ SELECT *
 FROM cte
 WHERE row_num > 1;
 
+-- Now, let's create another staging table, layoffs_staging2, which includes the row_num column. This will allow us to remove duplicate records where row_num is greater than 1
+
+CREATE TABLE layoffs_staging2 AS
+SELECT *, ROW_NUMBER() OVER( PARTITION BY company, location, industry, total_laid_off, percentage_laid_off, 'date', stage, country, funds_raised_millions) AS row_num
+FROM layoffs_staging;
+
+SELECT *
+FROM layoffs_staging2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
