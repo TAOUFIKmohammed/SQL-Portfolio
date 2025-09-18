@@ -45,8 +45,19 @@ FROM layoffs_staging;
 SELECT *
 FROM layoffs_staging2;
 
+-- To delete all rows where row_num is greater than 1:
+DELETE
+FROM layoffs_staging2
+WHERE row_num > 1;
 
+-- This gonna display no result
+SELECT *
+FROM layoffs_staging2
+WHERE row_num > 1;
 
+--So now we have the data without duplicate rows
+
+-- 2. Standardize Data
 
 
 
