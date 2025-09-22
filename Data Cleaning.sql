@@ -80,6 +80,7 @@ UPDATE layoffs_staging2
 SET industry = 'Crypto'
 WHERE industry LIKE 'Crypto%';
 
+-- 3. Look at null values and see what 
 -- replace both empty strings and strings that are just spaces with NULL
 UPDATE layoffs_staging2
 SET industry = NULL
@@ -108,6 +109,11 @@ ON t1.company=t2.company
 SET t1.industry=t2.industry
 WHERE (t1.industry IS NULL OR t1.industry ='')
 AND t2.industry IS NOT NULL;
+
+-- 4. remove any columns and rows that are not necessary
+-- last thing to do is to delete the column wh had created row_num
+
+ALTER TABLE layoffs_staging2 DROP COLUMN row_num;
 
 
 
