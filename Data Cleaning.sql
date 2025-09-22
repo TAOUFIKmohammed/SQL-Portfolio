@@ -59,8 +59,55 @@ WHERE row_num > 1;
 
 -- 2. Standardize Data
 
+--Remove spaces from both end of string company
 
+SELECT DISTINCT company, TRIM(company)
+FROM layoffs_staging2;
 
+UPDATE layoffs_staging2
+SET company=TRIM(company);
+
+-- now let's see the industry column
+
+SELECT DISTINCT industry
+FROM layoffs_staging2
+ORDER BY 1;
+
+-- we have two same industry 'Crypto' end 'CryptoCurrency' but they are the same
+-- we had to standardize this
+
+UPDATE layoffs_staging2
+SET industry = 'Crypto'
+WHERE industry LIKE 'Crypto%';
+
+-- replace both empty strings and strings that are just spaces with NULL
+UPDATE layoffs_staging2
+SET industry = NULL
+WHERE TRIM(industry) = '';
+
+-- We recognize that we have some country that have a point at the end, so let's delete it like 'unitedstates' and 'unitedstates.'
+
+UPDATE layoffs_staging2
+SET country = TRIM(TRAILING '.' FROM country);
+
+-- now let's change the format of the date from string to date
+-- But first we have to convert date = 'NULL' with the real NULL
+
+UPDATE layoffs_staging2
+SET date = NULL
+WHERE date = 'NULL';
+
+UPDATE layoffs_staging2
+SET date = STR_TO_DATE(date, '%m/%d/%Y');
+
+--We now recognize that some companies are assigned to an industry, while the same companies have blank or NULL values in the industry column
+
+UPDATE layoffs_staging2 t1
+JOIN layoffs_staging2 t2
+ON t1.company=t2.company
+SET t1.industry=t2.industry
+WHERE (t1.industry IS NULL OR t1.industry ='')
+AND t2.industry IS NOT NULL;
 
 
 
