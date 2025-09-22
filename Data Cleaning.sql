@@ -111,7 +111,6 @@ WHERE (t1.industry IS NULL OR t1.industry ='')
 AND t2.industry IS NOT NULL;
 
 -- 4. remove any columns and rows that are not necessary
--- last thing to do is to delete the column wh had created row_num
 
 ALTER TABLE layoffs_staging2 DROP COLUMN row_num;
 
