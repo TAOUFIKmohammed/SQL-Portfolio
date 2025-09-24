@@ -23,3 +23,12 @@ SELECT industry, SUM(total_laid_off)
 FROM layoffs_staging2
 GROUP BY industry
 ORDER BY 2 DESC;
+
+-- Now to have the year that we can find the most total_laid off
+
+SELECT YEAR(date), SUM(total_laid_off)
+FROM layoffs_staging2
+GROUP BY YEAR(date)
+ORDER BY 2 DESC;
+
+
