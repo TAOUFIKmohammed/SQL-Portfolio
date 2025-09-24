@@ -31,4 +31,32 @@ FROM layoffs_staging2
 GROUP BY YEAR(date)
 ORDER BY 2 DESC;
 
+-- to know the cumulate of the total laid off over the years we have to create a CTE and use a window function
+
+WITH base_data AS (
+  SELECT YEAR(date) AS year_1, SUM(total_laid_off) AS total_off
+  FROM layoffs_staging2
+  WHERE YEAR(date) IS NOT NULL
+  GROUP BY year_1
+  ORDER BY 1 DESC
+)
+
+SELECT year_1, total_off, SUM(total_off) OVER (ORDER BY year_1) AS rolling_total
+FROM base_data;
+
+-- Now let's see the ranking of companies that laid off the most people in each year
+
+WITH company_year AS(
+  SELECT company, YEAR(date) AS year_1, SUM(total_laid_off) AS total_off
+  FROM layoffs_staging2
+  WHERE YEAR(date) IS NOT NULL
+  GROUP BY company, YEAR(date)
+  ORDER BY 3 DESC
+), Ranking_company AS (
+  SELECT *, DENSE_RANK() OVER(PARTITION BY year_1 ORDER BY total_off DESC) AS Ranking
+  FROM company_year
+  /*WHERE year_1 = 2023*/
+  )
+SELECT *
+FROM Ranking_company
 
