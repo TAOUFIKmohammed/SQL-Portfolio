@@ -1,4 +1,4 @@
--- EDA
+-- EDA (Exploratory Data Analysis)
 
 -- Here we are jsut going to explore the data
 
